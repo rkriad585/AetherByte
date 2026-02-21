@@ -1,0 +1,39 @@
+[
+    {
+        "name": "VAR_COPY",
+        "description": "Copies value from one var to another.",
+        "regex": "copy (?P<src>\\w+) to (?P<dest>\\w+)",
+        "opcode": "00010010",
+        "args": [
+            {"group": "src", "type": "string"},
+            {"group": "dest", "type": "string"}
+        ]
+    },
+    {
+        "name": "VAR_DELETE",
+        "description": "Deletes a variable from memory.",
+        "regex": "(?:delete|forget|drop) (?P<var_name>\\w+)",
+        "opcode": "00011111",
+        "args": [{"group": "var_name", "type": "string"}]
+    },
+    {
+        "name": "STR_CONCAT",
+        "description": "Appends text to a string variable.",
+        "regex": "append [\"'](?P<text>.*?)[\"'] to (?P<var_name>\\w+)",
+        "opcode": "00010100",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "text", "type": "string"}
+        ]
+    },
+    {
+        "name": "VAR_SET_STRING",
+        "description": "Sets a string variable.",
+        "regex": "(?:set|var) (?P<var_name>\\w+) (?:to|=) [\"'](?P<text>.*?)[\"']",
+        "opcode": "00010101",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "text", "type": "string"}
+        ]
+    }
+]

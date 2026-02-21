@@ -1,0 +1,9 @@
+[
+    {
+        "name": "PIRATE_PRINT",
+        "description": "Prints text pirate style",
+        "regex": "ahoy [\"'](?P<text>.*?)[\"']",
+        "opcode": "00110001",
+        "args": [{"group": "text", "type": "string"}]
+    }
+]

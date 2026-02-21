@@ -1,0 +1,36 @@
+[
+    {
+        "name": "MATH_POW",
+        "description": "Raise variable to power.",
+        "regex": "(?:pow|raise) (?P<var_name>\\w+) (?:to|by) (?P<value>\\d+)",
+        "opcode": "00100101",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "MATH_MOD",
+        "description": "Modulus/Remainder.",
+        "regex": "(?:mod|remainder) (?P<var_name>\\w+) (?:by) (?P<value>\\d+)",
+        "opcode": "00100110",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "MATH_INC",
+        "description": "Increment by 1.",
+        "regex": "inc (?P<var_name>\\w+)",
+        "opcode": "00101000",
+        "args": [{"group": "var_name", "type": "string"}]
+    },
+    {
+        "name": "MATH_DEC",
+        "description": "Decrement by 1.",
+        "regex": "dec (?P<var_name>\\w+)",
+        "opcode": "00101001",
+        "args": [{"group": "var_name", "type": "string"}]
+    }
+]

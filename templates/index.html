@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="flex-1 p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-64px)] lg:overflow-hidden relative">
+    
+    <!-- === EDITOR SECTION === -->
+    <section id="colEditor" class="lg:col-span-5 flex flex-col h-auto lg:h-full">
+        <div class="glass-card flex flex-col w-full h-full">
+            <!-- Header with File Controls -->
+            <div class="h-14 border-b border-white/10 flex items-center justify-between px-4 bg-white/5">
+                <div class="flex items-center gap-2 cursor-pointer toggle-btn" data-target="#editorBody" data-icon="#editorIcon">
+                    <span class="text-xs font-bold tracking-widest text-gray-300">SOURCE CODE</span>
+                    <svg id="editorIcon" class="w-4 h-4 text-gray-500 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                
+                <!-- NEW: DATABASE CONTROLS -->
+                <div class="flex items-center gap-3">
+                    <button onclick="openSaveModal()" class="text-xs flex items-center gap-1 text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        SAVE
+                    </button>
+                    <div class="w-px h-3 bg-gray-700"></div>
+                    <button onclick="openLoadModal()" class="text-xs flex items-center gap-1 text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        LOAD
+                    </button>
+                </div>
+            </div>
+            
+            <div id="editorBody" class="flex-1 flex flex-col relative" style="min-height: 350px;">
+                <div class="flex-1 relative overflow-hidden bg-transparent">
+                <div class="flex flex-1 relative">
+                    <div class="line-numbers w-10 py-6 text-right pr-2 text-xs font-mono text-gray-700 border-r border-white/5 bg-black/20 leading-relaxed hidden lg:block">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
+                    <textarea id="editor" class="opacity-0">set score to 10
+add 5 to score
+mul 2 to score
+print "Result:"
+print score
+# This is a comment
+print "---"
+loop 3
+print "Processing..."
+alert system</textarea>
+                </div>
+                </div>
+                <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md flex justify-end">
+                    <button id="btnCompile" class="btn-action px-6 py-3 text-sm flex items-center gap-2 shadow-lg">COMPILE</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- === SECTION 2: BINARY === -->
+<section id="colBinary" class="lg:col-span-3 flex flex-col h-auto lg:h-full">
+    <div class="glass-card flex flex-col w-full h-full">
+        
+        <!-- HEADER -->
+        <div class="h-14 border-b border-white/10 flex items-center justify-between px-4 bg-white/5">
+            
+            <!-- Collapse Toggle -->
+            <div class="flex items-center gap-2 cursor-pointer toggle-btn" data-target="#binaryBody" data-icon="#binaryIcon">
+                <span class="text-xs font-bold tracking-widest text-red-500">BINARY CORE</span>
+                <svg id="binaryIcon" class="w-5 h-5 text-gray-500 transition-transform lg:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+
+            <!-- NEW: EDIT BUTTON -->
+            <button onclick="toggleBinaryEdit()" id="btnEditBinary" class="text-gray-500 hover:text-white transition-colors p-2 rounded hover:bg-white/10" title="Edit Binary Manually">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- BODY (Container) -->
+        <div id="binaryBody" class="flex-1 flex flex-col hidden lg:flex relative overflow-hidden" style="min-height: 200px;">
+            
+            <!-- 1. VISUAL DISPLAY (The pretty view) -->
+            <!-- flex-1 lets it grow to fill space, keeping the footer visible -->
+            <div id="binaryOutput" class="flex-1 p-4 font-mono text-[10px] md:text-xs leading-loose text-gray-500 overflow-y-auto break-all bg-black/20">
+                <div class="flex h-full items-center justify-center opacity-30 text-center flex-col gap-2">
+                    <span class="text-2xl opacity-50">10110</span>
+                    <span>AWAITING COMPILATION...</span>
+                </div>
+            </div>
+        
+            <!-- 2. MANUAL EDITOR (The raw view) -->
+            <!-- FIX: Removed 'h-full', kept 'flex-1'. Now it fits perfectly above the button. -->
+            <textarea id="binaryEditor" 
+                class="hidden flex-1 w-full bg-[#030303] text-red-500 font-mono text-xs p-4 resize-none outline-none border-l-2 border-red-500/50 focus:border-red-500 transition-colors placeholder-red-900/30 leading-loose shadow-inner"
+                spellcheck="false" 
+                placeholder="// RAW BINARY MODE&#10;// Enter 8-bit instructions here...&#10;00010000 00000101 ..."></textarea>
+            
+            <!-- Footer Action (Always Visible) -->
+            <!-- z-10 ensures it sits on top if there's any weird overlap -->
+            <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md z-10 shrink-0">
+                <button id="btnRun" class="btn-action btn-accent w-full py-3 text-sm font-bold tracking-wide opacity-50 cursor-not-allowed transition-all shadow-[0_4px_20px_rgba(0,0,0,0.5)]" disabled>
+                    EXECUTE BINARY
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- === TERMINAL SECTION === -->
+    <section id="colTerminal" class="lg:col-span-4 flex flex-col h-auto lg:h-full">
+        <div class="glass-card flex flex-col w-full h-full border-dashed border-gray-700 bg-black/40">
+            <!-- TERMINAL HEADER -->
+<div class="h-14 border-b border-white/10 flex items-center justify-between px-4 cursor-pointer bg-white/5">
+    
+    <!-- LEFT: Collapse Toggle -->
+    <div class="flex items-center gap-2 toggle-btn" data-target="#terminalBody" data-icon="#terminalIcon">
+         <span class="text-xs font-mono text-gray-400">root@aether:~</span>
+         <svg id="terminalIcon" class="w-5 h-5 text-gray-500 transition-transform lg:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+    </div>
+
+    <!-- RIGHT: Clear Button -->
+    <button onclick="clearTerminal()" class="text-gray-500 hover:text-red-500 transition-colors p-2 rounded hover:bg-white/10" title="Clear Terminal">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+        </svg>
+    </button>
+</div>
+            <div id="terminalBody" class="flex-1 flex-col hidden lg:flex p-4 font-mono text-xs md:text-sm text-gray-300 overflow-y-auto" style="min-height: 200px;">
+                <div class="mb-2 text-gray-600">AetherByte OS [v3.0]<br>Storage Driver Loaded.</div>
+                <div id="consoleContent"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === FILE MANAGER MODAL (Hidden) === -->
+    <div id="fileModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md p-6 bg-[#0a0a0a]">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modalTitle" class="text-lg font-bold text-white tracking-tight">FILE MANAGER</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-white">&times;</button>
+            </div>
+            
+            <!-- SAVE VIEW -->
+            <div id="saveView" class="hidden">
+                <input type="text" id="scriptTitle" placeholder="Enter script name..." class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-red-500 mb-4 font-mono text-sm">
+                <button onclick="commitSave()" class="btn-action w-full py-3 text-sm">CONFIRM SAVE</button>
+            </div>
+
+            <!-- LOAD VIEW -->
+            <div id="loadView" class="hidden">
+                <div id="fileList" class="max-h-60 overflow-y-auto space-y-2 mb-4">
+                    <!-- Files injected via JS -->
+                    <div class="text-center text-gray-500 text-xs py-4">Loading files...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- 
+    =======================================================
+    FILE TOOLS MODAL (Mobile Popup)
+    =======================================================
+    Design: Glassmorphism + Industrial Borders
+-->
+<div id="toolsModal" class="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm hidden items-end sm:items-center justify-center p-4 transition-opacity duration-300">
+    
+    <!-- Modal Card -->
+    <div class="w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-3xl overflow-hidden shadow-2xl slide-up-animation">
+        
+        <!-- Header -->
+        <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+            <h3 class="text-sm font-tech tracking-widest text-gray-400">FILE OPERATIONS</h3>
+            <button onclick="closeToolsModal()" class="text-gray-500 hover:text-white">&times;</button>
+        </div>
+
+        <!-- Actions -->
+        <div class="p-6 grid grid-cols-2 gap-4">
+            <!-- 1. SHARE (New) -->
+            <!-- We close the tools modal first, then open the share modal -->
+            <button onclick="closeToolsModal(); openShareModal()" class="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 active:scale-95 transition-all group">
+                <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center border border-white/10 group-hover:border-blue-500 transition-colors">
+                    <!-- Share Icon -->
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                </div>
+                <span class="text-xs font-mono font-bold text-gray-300">SHARE</span>
+            </button>
+            
+            <!-- 2. SETTINGS (New) -->
+    <!-- Simple link to the settings page -->
+    <a href="/settings" class="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 active:scale-95 transition-all group">
+        <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center border border-white/10 group-hover:border-white transition-colors">
+            <!-- Settings Icon -->
+            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </div>
+        <span class="text-xs font-mono font-bold text-gray-300">SYSTEM</span>
+    </a>
+    
+            <!-- ACTION 1: DOWNLOAD -->
+            <button onclick="downloadCode(); closeToolsModal()" class="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 active:scale-95 transition-all group">
+                <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center border border-white/10 group-hover:border-[#EB0029] transition-colors">
+                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                </div>
+                <span class="text-xs font-mono font-bold text-gray-300">DOWNLOAD</span>
+            </button>
+
+            <!-- ACTION 2: UPLOAD -->
+            <!-- Note: Takes a hidden file input to work -->
+            <button onclick="triggerUpload()" class="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 active:scale-95 transition-all group">
+                <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center border border-white/10 group-hover:border-green-500 transition-colors">
+                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                </div>
+                <span class="text-xs font-mono font-bold text-gray-300">UPLOAD</span>
+            </button>
+
+        </div>
+        
+        <!-- Footer -->
+        <div class="px-6 pb-6 text-center">
+             <div class="text-[10px] text-gray-600 font-mono">SUPPORTS .TXT AND .NSA FILES</div>
+        </div>
+    </div>
+</div>
+
+<!-- HIDDEN FILE INPUT (Technical Requirement for Upload) -->
+<input type="file" id="fileUploadInput" class="hidden" accept=".nsa,.js,.py" onchange="handleFileUpload(this)">
+
+
+<!-- 
+    =======================================================
+    MOBILE FAB STACK (Right Side)
+    =======================================================
+    1. Primary Action: RUN (Moved up to bottom-24)
+    2. Secondary Action: MENU (Placed below at bottom-6)
+-->
+
+<!-- 1. THE RUN BUTTON (Moved Up) -->
+<button 
+    onclick="runAllSequence()" 
+    class="fixed bottom-24 right-6 z-40 lg:hidden group outline-none"
+    aria-label="Run System">
+    <div class="w-14 h-14 bg-black/90 border border-white/20 rounded-full flex items-center justify-center relative shadow-[0_10px_30px_rgba(0,0,0,0.8)] active:scale-90 transition-all duration-200">
+        <svg class="w-5 h-5 fill-white ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <!-- Red Dot Accent -->
+        <div class="absolute top-3 right-3 w-1.5 h-1.5 bg-[#EB0029] rounded-full animate-pulse shadow-[0_0_10px_#EB0029]"></div>
+    </div>
+</button>
+
+<!-- 2. THE MENU BUTTON (New - Placed Below) -->
+<button 
+    onclick="openToolsModal()"
+    class="fixed bottom-6 right-6 z-50 lg:hidden group outline-none"
+    aria-label="File Tools">
+    
+    <!-- Design: Smaller, White Background for contrast against the Black Run button -->
+    <div class="w-14 h-14 bg-[#EAEAEA] border border-black/10 rounded-full flex items-center justify-center relative shadow-[0_5px_20px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-200">
+        <!-- Menu Icon (Grid of dots) -->
+        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+    </div>
+</button>
+<!-- Hidden Input for Desktop Upload -->
+<input type="file" id="navFileUpload" class="hidden" accept=".nsa,.js,.py" onchange="handleDesktopUpload(this)">
+<!-- === SHARE PROJECT MODAL (Fixed) === -->
+<div id="shareModal" class="fixed inset-0 z-[70] bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-card w-full max-w-md p-6 bg-[#0a0a0a] border border-white/10 relative overflow-hidden">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+            <h3 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                SHARE PROJECT
+            </h3>
+            <button onclick="closeShareModal()" class="text-gray-500 hover:text-white">&times;</button>
+        </div>
+
+        <!-- Permission Buttons -->
+        <div class="mb-6">
+            <label class="text-[10px] text-gray-500 font-mono mb-2 block tracking-widest">GUEST PERMISSIONS</label>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="selectPermission('read')" id="permBtn-read" class="perm-btn active bg-blue-600 text-white border border-blue-500 rounded p-2 text-xs font-bold transition-all">READ ONLY</button>
+                <button onclick="selectPermission('execute')" id="permBtn-execute" class="perm-btn bg-white/5 text-gray-400 border border-white/10 rounded p-2 text-xs font-bold hover:bg-white/10 transition-all">EXECUTE</button>
+                <button onclick="selectPermission('all')" id="permBtn-all" class="perm-btn bg-white/5 text-gray-400 border border-white/10 rounded p-2 text-xs font-bold hover:bg-white/10 transition-all">FULL EDIT</button>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button id="btnGenLink" onclick="generateLinkAction()" class="btn-action w-full py-3 text-sm font-bold mb-4 shadow-lg hover:bg-blue-500 hover:text-white transition-all">
+            GENERATE LINK
+        </button>
+
+        <!-- RESULT SECTION (Hidden by default) -->
+        <div id="shareResultWrapper" class="hidden bg-black/40 p-4 rounded-xl border border-white/10">
+            <label class="text-[10px] text-gray-500 font-mono mb-2 block tracking-widest">UNIQUE SHARE LINK</label>
+            
+            <div class="flex items-center gap-2">
+                <!-- Input Field -->
+                <input type="text" id="shareLinkInput" readonly class="flex-1 bg-[#050505] border border-white/20 rounded-lg p-2 text-xs text-blue-400 font-mono outline-none focus:border-blue-500">
+                
+                <!-- COPY BUTTON (The one you were missing) -->
+                <button onclick="copyLinkToClipboard()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-xs font-bold transition-colors border border-white/10">
+                    COPY
+                </button>
+            </div>
+            <div id="copyFeedback" class="text-[10px] text-green-500 mt-2 hidden text-right">Copied to clipboard!</div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

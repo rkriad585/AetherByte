@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-4 md:p-8 mt-4 md:mt-10 mb-20">
+    <div class="flex items-center gap-4 mb-8">
+        <a href="/" class="text-gray-500 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></a>
+        <h1 class="text-3xl font-bold tracking-tight">System Configuration</h1>
+    </div>
+
+    <div class="grid gap-6">
+        <!-- Editor Settings -->
+        <div class="glass-card p-6">
+            <h2 class="text-lg font-bold text-white mb-4">Editor Interface</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-300">Font Size</span>
+                    <select id="settingFontSize" onchange="saveSetting('AetherFontSize', this.value)" class="bg-black border border-white/20 rounded p-2 text-xs text-white outline-none w-32">
+                        <option value="12px">Small</option><option value="14px">Medium</option><option value="16px">Large</option><option value="18px">Huge</option>
+                    </select>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-300">Word Wrap</span>
+                    <label class="switch"><input type="checkbox" id="settingLineWrap" onchange="saveSetting('AetherLineWrap', this.checked)"><span class="slider round"></span></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout Settings -->
+        <div class="glass-card p-6">
+            <h2 class="text-lg font-bold text-white mb-4">Workspace Layout</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button id="btnStandard" onclick="saveSetting('AetherLayout', 'standard'); updateUI()" class="p-4 border border-white/10 bg-white/5 rounded-xl text-left"><span class="font-bold text-gray-300 text-sm">Standard (3 Col)</span></button>
+                <button id="btnFocus" onclick="saveSetting('AetherLayout', 'focus'); updateUI()" class="p-4 border border-white/10 bg-white/5 rounded-xl text-left"><span class="font-bold text-gray-300 text-sm">Focus (2 Col)</span></button>
+            </div>
+        </div>
+
+        <!-- Behavior Settings -->
+        <div class="glass-card p-6">
+            <h2 class="text-lg font-bold text-white mb-4">Core Behavior</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-300">Binary Animation Speed</span>
+                    <select id="settingBinSpeed" onchange="saveSetting('AetherBinSpeed', this.value)" class="bg-black border border-white/20 rounded p-2 text-xs text-white outline-none w-32">
+                        <option value="1">Instant</option><option value="5">Fast</option><option value="20">Cinematic</option><option value="50">Slow</option>
+                    </select>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-300">Auto-Clear Terminal</span>
+                    <label class="switch"><input type="checkbox" id="settingAutoClear" onchange="saveSetting('AetherAutoClear', this.checked)"><span class="slider round"></span></label>
+                </div>
+            </div>
+        </div>
+        
+         <!-- Reset -->
+        <div class="border border-red-900/30 bg-red-900/10 rounded-xl p-6 flex justify-between items-center">
+            <h3 class="text-red-500 font-bold text-sm">Factory Reset</h3>
+            <button onclick="factoryReset()" class="px-4 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500 rounded-lg text-xs font-bold transition-all">RESET</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 20px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: #EB0029; }
+    input:checked + .slider:before { transform: translateX(20px); }
+</style>
+
+<script>
+    function saveSetting(key, value) { localStorage.setItem(key, value); if(key === 'AetherLayout') updateUI(); }
+    function updateUI() {
+        const mode = localStorage.getItem('AetherLayout') || 'standard';
+        $('#btnStandard, #btnFocus').removeClass('border-blue-500 bg-blue-500/10').addClass('border-white/10 bg-white/5');
+        if(mode === 'focus') $('#btnFocus').removeClass('border-white/10 bg-white/5').addClass('border-blue-500 bg-blue-500/10');
+        else $('#btnStandard').removeClass('border-white/10 bg-white/5').addClass('border-blue-500 bg-blue-500/10');
+    }
+    function factoryReset() { if(confirm("Reset all settings?")) { localStorage.clear(); location.reload(); } }
+    
+    $(document).ready(function() {
+        $('#settingFontSize').val(localStorage.getItem('AetherFontSize') || '14px');
+        $('#settingBinSpeed').val(localStorage.getItem('AetherBinSpeed') || '5');
+        $('#settingLineWrap').prop('checked', (localStorage.getItem('AetherLineWrap') === 'true'));
+        $('#settingAutoClear').prop('checked', (localStorage.getItem('AetherAutoClear') === 'true'));
+        updateUI();
+    });
+</script>
+{% endblock %}

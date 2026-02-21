@@ -1,0 +1,83 @@
+[
+    {
+        "name": "VARIABLE_SET",
+        "description": "Sets a variable. Example: set score to 10",
+        "regex": "(?:set|var) (?P<var_name>\\w+) (?:to|=) (?P<value>\\d+)",
+        "opcode": "00010000",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "MATH_ADD",
+        "description": "Adds a number. Example: add 5 to score",
+        "regex": "add (?P<value>\\d+) (?:to|into) (?P<var_name>\\w+)",
+        "opcode": "00100001",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "MATH_SUB",
+        "description": "Subtracts a number. Example: sub 5 from score",
+        "regex": "(?:sub|subtract|remove) (?P<value>\\d+) (?:from) (?P<var_name>\\w+)",
+        "opcode": "00100010",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "MATH_MUL",
+        "description": "Multiplies. Example: mul 2 by score",
+        "regex": "(?:mul|multiply) (?P<value>\\d+) (?:by|with) (?P<var_name>\\w+)",
+        "opcode": "00100011",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "PRINT_STRING",
+        "description": "Prints text. Example: print 'Hello'",
+        "regex": "print [\"'](?P<text>.*?)[\"']",
+        "opcode": "00110001",
+        "args": [
+            {"group": "text", "type": "string"}
+        ]
+    },
+    {
+        "name": "PRINT_VAR",
+        "description": "Prints variable value. Example: print score",
+        "regex": "print (?P<var_name>\\w+)",
+        "opcode": "00110010",
+        "args": [
+            {"group": "var_name", "type": "string"}
+        ]
+    },
+    {
+        "name": "LOOP",
+        "description": "Loops next line. Example: loop 5",
+        "regex": "loop (?P<count>\\d+)",
+        "opcode": "01000000",
+        "args": [
+            {"group": "count", "type": "int"}
+        ]
+    },
+    {
+        "name": "SYSTEM_CLEAR",
+        "description": "Clears terminal.",
+        "regex": "clear",
+        "opcode": "11110000",
+        "args": []
+    },
+    {
+        "name": "SYSTEM_ALERT",
+        "description": "System Bell.",
+        "regex": "alert",
+        "opcode": "11111111",
+        "args": []
+    }
+]

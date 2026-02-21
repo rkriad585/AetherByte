@@ -1,0 +1,56 @@
+[
+    {
+        "name": "CMP_EQUALS",
+        "description": "Checks if variable equals value. Sets internal flag.",
+        "regex": "if (?P<var_name>\\w+) (?:is|==|equals) (?P<value>\\d+)",
+        "opcode": "01010001",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "CMP_NOT_EQUALS",
+        "description": "Checks if variable does not equal value.",
+        "regex": "if (?P<var_name>\\w+) (?:is not|!=) (?P<value>\\d+)",
+        "opcode": "01010010",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "CMP_GREATER",
+        "description": "Checks if variable is greater than value.",
+        "regex": "if (?P<var_name>\\w+) (?:>|is greater than) (?P<value>\\d+)",
+        "opcode": "01010011",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "CMP_LESS",
+        "description": "Checks if variable is less than value.",
+        "regex": "if (?P<var_name>\\w+) (?:<|is less than) (?P<value>\\d+)",
+        "opcode": "01010100",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "JUMP_TRUE",
+        "description": "If previous check was TRUE, jump X lines.",
+        "regex": "then do lines (?P<lines>\\d+)",
+        "opcode": "01100001",
+        "args": [{"group": "lines", "type": "int"}]
+    },
+    {
+        "name": "JUMP_FALSE",
+        "description": "Else/Otherwise jump X lines.",
+        "regex": "(?:else|otherwise) skip (?P<lines>\\d+)",
+        "opcode": "01100010",
+        "args": [{"group": "lines", "type": "int"}]
+    }
+]
