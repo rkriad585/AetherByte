@@ -1,5 +1,6 @@
 import time      # Helps the computer wait
 import random    # Helps the computer pick random numbers
+import datetime
 
 class BinaryVM:
     """
@@ -11,12 +12,13 @@ class BinaryVM:
         # Stores the result of the last comparison (True/False)
         
         self.lists = {}     # <--- ADD THIS! (Stores lists of data)
-        
+        self.dicts = {}     # <--- ADD THIS
         self.flag_cmp = False 
 
     def run(self, binary_data):
         self.memory = {} 
         self.lists = {}     # <--- ADD THIS! (Clears old lists)
+        self.dicts = {}     # <--- ADD THIS
         self.flag_cmp = False
         output = []
         lines = binary_data.strip().split('\n')
@@ -80,7 +82,234 @@ class BinaryVM:
                         else:
                             self.memory[name] = text_to_append
                             
-                    
+                    # ... inside the loop ...
+
+                    # ==========================================
+                    # NEW TRICK: DATA PARSING & UTILS 🛠️
+                    # ==========================================
+
+                    # SPLIT STRING (00111100)
+                    elif opcode == "00111100":
+                        # 1. Read Src Var
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        src = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        # 2. Read Delimiter
+                        l2 = int(parts[idx], 2); idx += 1
+                        delim = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+                        # 3. Read Dest List
+                        l3 = int(parts[idx], 2); idx += 1
+                        dest_list = "".join([chr(int(b, 2)) for b in parts[idx:idx+l3]]); idx += l3
+
+                        if src in self.memory:
+                            # Python split logic
+                            val_str = str(self.memory[src])
+                            self.lists[dest_list] = val_str.split(delim)
+
+                    # JOIN LIST (00111101)
+                    elif opcode == "00111101":
+                        # 1. Read Src List
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        src_list = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        # 2. Read Delimiter
+                        l2 = int(parts[idx], 2); idx += 1
+                        delim = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+                        # 3. Read Dest Var
+                        l3 = int(parts[idx], 2); idx += 1
+                        dest_var = "".join([chr(int(b, 2)) for b in parts[idx:idx+l3]]); idx += l3
+
+                        if src_list in self.lists:
+                            # Python join logic
+                            # Convert all items to string first just in case
+                            str_list = [str(i) for i in self.lists[src_list]]
+                            self.memory[dest_var] = delim.join(str_list)
+
+                    # REPLACE STRING (00111110)
+                    elif opcode == "00111110":
+                        # 1. Var Name
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        var_name = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        # 2. Old Text
+                        l2 = int(parts[idx], 2); idx += 1
+                        old_txt = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+                        # 3. New Text
+                        l3 = int(parts[idx], 2); idx += 1
+                        new_txt = "".join([chr(int(b, 2)) for b in parts[idx:idx+l3]]); idx += l3
+
+                        if var_name in self.memory:
+                            original = str(self.memory[var_name])
+                            self.memory[var_name] = original.replace(old_txt, new_txt)
+
+                    # CAST TO INT (10000011)
+                    elif opcode == "10000011":
+                        l1 = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+l1]])
+                        if name in self.memory:
+                            try:
+                                self.memory[name] = int(self.memory[name])
+                            except:
+                                self.memory[name] = 0 # Default to 0 on error
+
+                    # CAST TO STRING (10000100)
+                    elif opcode == "10000100":
+                        l1 = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+l1]])
+                        if name in self.memory:
+                            self.memory[name] = str(self.memory[name])
+
+                    # GET TIME (10000010)
+                    elif opcode == "10000010":
+                        l1 = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+l1]])
+                        # Get formatted time HH:MM:SS
+                        now = datetime.datetime.now().strftime("%H:%M:%S")
+                        self.memory[name] = now
+                        
+                    # ==========================================
+                    # NEW TRICK: DICTIONARIES (Maps) 🗺️
+                    # ==========================================
+
+                    # CREATE DICT (01111000)
+                    elif opcode == "01111000":
+                        n_len = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+n_len]])
+                        self.dicts[name] = {}
+
+                    # SET KEY (01111001)
+                    elif opcode == "01111001":
+                        # 1. Dict Name
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        d_name = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        
+                        # 2. Key Name
+                        l2 = int(parts[idx], 2); idx += 1
+                        key = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+                        
+                        # 3. Value
+                        l3 = int(parts[idx], 2); idx += 1
+                        val = "".join([chr(int(b, 2)) for b in parts[idx:idx+l3]]); idx += l3
+                        
+                        if d_name in self.dicts:
+                            self.dicts[d_name][key] = val
+                        else:
+                            output.append(f"ERR: Dict '{d_name}' undefined.")
+
+                    # GET KEY (01111010)
+                    elif opcode == "01111010":
+                        # 1. Dict Name
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        d_name = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        
+                        # 2. Key Name
+                        l2 = int(parts[idx], 2); idx += 1
+                        key = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+                        
+                        # 3. Dest Var
+                        l3 = int(parts[idx], 2); idx += 1
+                        dest = "".join([chr(int(b, 2)) for b in parts[idx:idx+l3]]); idx += l3
+
+                        if d_name in self.dicts and key in self.dicts[d_name]:
+                            self.memory[dest] = self.dicts[d_name][key]
+                        else:
+                            self.memory[dest] = "NULL"
+
+                    # ==========================================
+                    # NEW TRICK: STRING MANIPULATION 🔡
+                    # ==========================================
+
+                    # LENGTH (00111000)
+                    elif opcode == "00111000":
+                        # Src Var
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        src = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        # Dest Var
+                        l2 = int(parts[idx], 2); idx += 1
+                        dest = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+                        
+                        if src in self.memory:
+                            self.memory[dest] = len(str(self.memory[src]))
+                        elif src in self.lists:
+                            self.memory[dest] = len(self.lists[src])
+
+                    # UPPERCASE (00111001)
+                    elif opcode == "00111001":
+                        l1 = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+l1]])
+                        if name in self.memory:
+                            self.memory[name] = str(self.memory[name]).upper()
+
+                    # LOWERCASE (00111010)
+                    elif opcode == "00111010":
+                        l1 = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+l1]])
+                        if name in self.memory:
+                            self.memory[name] = str(self.memory[name]).lower()
+                            
+                            
+                    # ==========================================
+                    # NEW TRICK: ADVANCED MATH & LOGIC 🧮
+                    # ==========================================
+
+                    # ABSOLUTE VALUE (OpCode: 00101010)
+                    elif opcode == "00101010":
+                        n_len = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+n_len]])
+                        if name in self.memory:
+                            self.memory[name] = abs(self.memory[name])
+
+                    # MAX (OpCode: 00101011)
+                    elif opcode == "00101011":
+                        n_len = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+n_len]])
+                        val = int(parts[2+n_len], 2)
+                        if name in self.memory:
+                            self.memory[name] = max(self.memory[name], val)
+
+                    # MIN (OpCode: 00101100)
+                    elif opcode == "00101100":
+                        n_len = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+n_len]])
+                        val = int(parts[2+n_len], 2)
+                        if name in self.memory:
+                            self.memory[name] = min(self.memory[name], val)
+
+                    # SWAP (OpCode: 00010011)
+                    elif opcode == "00010011":
+                        # Read Var 1
+                        l1 = int(parts[1], 2)
+                        v1 = "".join([chr(int(b, 2)) for b in parts[2:2+l1]])
+                        idx = 2 + l1
+                        # Read Var 2
+                        l2 = int(parts[idx], 2)
+                        idx += 1
+                        v2 = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]])
+                        
+                        # Swap values safely
+                        if v1 in self.memory and v2 in self.memory:
+                            self.memory[v1], self.memory[v2] = self.memory[v2], self.memory[v1]
+
+                    # GTE (>=)
+                    elif opcode == "01010101":
+                        n_len = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+n_len]])
+                        val = int(parts[2+n_len], 2)
+                        if name in self.memory:
+                            self.flag_cmp = (self.memory[name] >= val)
+
+                    # LTE (<=)
+                    elif opcode == "01010110":
+                        n_len = int(parts[1], 2)
+                        name = "".join([chr(int(b, 2)) for b in parts[2:2+n_len]])
+                        val = int(parts[2+n_len], 2)
+                        if name in self.memory:
+                            self.flag_cmp = (self.memory[name] <= val)
+                            
+                            
                     # ==========================================
                     # NEW TRICK: LISTS (Arrays) 📝
                     # ==========================================
@@ -137,7 +366,27 @@ class BinaryVM:
                         else:
                             output.append(f"ERR: List '{list_name}' not found.")
                             
-                            
+                    # PUSH VARIABLE TO LIST (01110011)
+                    elif opcode == "01110011":
+                        # 1. Read List Name
+                        idx = 1
+                        l1 = int(parts[idx], 2); idx += 1
+                        list_name = "".join([chr(int(b, 2)) for b in parts[idx:idx+l1]]); idx += l1
+                        
+                        # 2. Read Source Variable Name
+                        l2 = int(parts[idx], 2); idx += 1
+                        src_var = "".join([chr(int(b, 2)) for b in parts[idx:idx+l2]]); idx += l2
+
+                        if list_name in self.lists:
+                            if src_var in self.memory:
+                                # Get value from memory and push to list
+                                val = self.memory[src_var]
+                                self.lists[list_name].append(val)
+                            else:
+                                output.append(f"ERR: Variable '{src_var}' undefined.")
+                        else:
+                            output.append(f"ERR: List '{list_name}' undefined.")
+                        
                     # ==========================================
                     # NEW TRICK: SPECIAL POWERS ✨
                     # ==========================================

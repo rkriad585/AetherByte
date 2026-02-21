@@ -1,0 +1,20 @@
+create list inventory
+set capacity to 5
+
+# Add Items
+push 101 to list inventory
+push 102 to list inventory
+push 103 to list inventory
+
+# Check Size
+length of inventory into currentSize
+print "Inventory Count:"
+print currentSize
+
+if currentSize < capacity
+then do lines 1
+print "Space Available"
+
+if currentSize >= capacity
+then do lines 1
+print "Inventory Full!"

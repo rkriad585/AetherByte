@@ -26,5 +26,15 @@
             {"group": "dest_var", "type": "string"},
             {"group": "index", "type": "int"}
         ]
-    }
+    },
+    {
+            "name": "LIST_PUSH_VAR",
+            "description": "Push a variable's value into a list.",
+            "regex": "push (?P<var_name>\\w+) to list (?P<list_name>\\w+)",
+            "opcode": "01110011",
+            "args": [
+                {"group": "list_name", "type": "string"},
+                {"group": "var_name", "type": "string"}
+            ]
+     }
 ]

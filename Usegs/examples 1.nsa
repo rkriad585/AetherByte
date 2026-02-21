@@ -1,0 +1,16 @@
+set a to 50
+set b to 10
+
+print "Before Swap:"
+print a
+print b
+
+# Check if A > B
+if a > 10
+then do lines 1
+swap a with b
+
+print "After Swap:"
+print a
+print b
+# Output: 10, 50

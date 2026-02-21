@@ -1,0 +1,17 @@
+# Initialize
+print "Rolling Dice..."
+random 1 to 6 into dice
+
+print "You rolled:"
+print dice
+
+# Check for win condition (6)
+if dice equals 6
+then do lines 2
+print "JACKPOT! You Win!"
+alert
+
+# Check for loss
+if dice equals 1
+then do lines 1
+print "Critical Failure!"

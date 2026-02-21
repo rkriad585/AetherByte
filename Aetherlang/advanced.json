@@ -1,0 +1,59 @@
+[
+    {
+        "name": "MATH_ABS",
+        "description": "Convert to positive number. Example: abs myVar",
+        "regex": "abs (?P<var_name>\\w+)",
+        "opcode": "00101010",
+        "args": [{"group": "var_name", "type": "string"}]
+    },
+    {
+        "name": "MATH_MAX",
+        "description": "Keep larger of two numbers. Example: max myVar with 10",
+        "regex": "max (?P<var_name>\\w+) (?:with|and) (?P<value>\\d+)",
+        "opcode": "00101011",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "MATH_MIN",
+        "description": "Keep smaller of two numbers. Example: min myVar with 5",
+        "regex": "min (?P<var_name>\\w+) (?:with|and) (?P<value>\\d+)",
+        "opcode": "00101100",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "VAR_SWAP",
+        "description": "Swap two variables. Example: swap x with y",
+        "regex": "swap (?P<var1>\\w+) (?:with|and) (?P<var2>\\w+)",
+        "opcode": "00010011",
+        "args": [
+            {"group": "var1", "type": "string"},
+            {"group": "var2", "type": "string"}
+        ]
+    },
+    {
+        "name": "CMP_GTE",
+        "description": "Check if >= (Greater or Equal)",
+        "regex": "if (?P<var_name>\\w+) (?:>=|at least) (?P<value>\\d+)",
+        "opcode": "01010101",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "CMP_LTE",
+        "description": "Check if <= (Less or Equal)",
+        "regex": "if (?P<var_name>\\w+) (?:<=|at most) (?P<value>\\d+)",
+        "opcode": "01010110",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    }
+]

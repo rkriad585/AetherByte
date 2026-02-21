@@ -1,0 +1,26 @@
+[
+    {
+        "name": "STR_LEN",
+        "description": "Get length of string. Example: length of myStr into myLen",
+        "regex": "length of (?P<src>\\w+) into (?P<dest>\\w+)",
+        "opcode": "00111000",
+        "args": [
+            {"group": "src", "type": "string"},
+            {"group": "dest", "type": "string"}
+        ]
+    },
+    {
+        "name": "STR_UPPER",
+        "description": "Convert to Uppercase. Example: uppercase myStr",
+        "regex": "uppercase (?P<var>\\w+)",
+        "opcode": "00111001",
+        "args": [{"group": "var", "type": "string"}]
+    },
+    {
+        "name": "STR_LOWER",
+        "description": "Convert to Lowercase. Example: lowercase myStr",
+        "regex": "lowercase (?P<var>\\w+)",
+        "opcode": "00111010",
+        "args": [{"group": "var", "type": "string"}]
+    }
+]

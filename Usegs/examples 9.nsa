@@ -1,0 +1,12 @@
+set rawInput to "  HeLLo WoRLd  "
+
+# Normalize
+uppercase rawInput
+print "Upper:"
+print rawInput
+# Output:   HELLO WORLD  
+
+# Get Length
+length of rawInput into charCount
+print "Character Count:"
+print charCount

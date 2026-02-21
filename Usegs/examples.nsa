@@ -1,0 +1,18 @@
+# Initialize Health
+set health to 90
+
+# Take Damage (Simulated)
+sub 20 from health
+
+# Heal (Simulated)
+add 50 to health
+
+# Clamp Maximum to 100
+min health with 100
+
+# Clamp Minimum to 0 (No negative health)
+max health with 0
+
+print "Current Health:"
+print health
+# Output: 100

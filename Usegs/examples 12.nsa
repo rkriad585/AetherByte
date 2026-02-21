@@ -1,0 +1,14 @@
+# Simulated CSV Row: "ID,Name,Role"
+set rawData to "101,Alice,Admin"
+
+print "Raw Data:"
+print rawData
+
+# Split by comma
+split rawData by "," into list dataParts
+
+# Extract Role (Index 2)
+get index 2 from list dataParts to var role
+
+print "Extracted Role:"
+print role

@@ -1,0 +1,10 @@
+set message to "System"
+
+# Append text
+append " is " to message
+append "Online" to message
+
+print message
+# Output: System is Online
+
+alert

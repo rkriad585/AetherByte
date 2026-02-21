@@ -248,7 +248,7 @@ function downloadCode() {
     const blob = new Blob([codeText], { type: 'text/plain' });
     const anchor = document.createElement('a');
     anchor.href = URL.createObjectURL(blob);
-    anchor.download = 'Natural-Script.ns'; // .ns extension
+    anchor.download = 'Natural-Script.nsa'; // .nsa extension
     anchor.click();
     URL.revokeObjectURL(anchor.href);
 }

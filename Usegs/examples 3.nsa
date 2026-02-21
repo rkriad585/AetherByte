@@ -1,0 +1,12 @@
+print "Installing Update..."
+set percent to 0
+
+# Loop 4 times
+loop 4
+add 25 to percent
+print percent
+print "% Complete..."
+wait 1 seconds
+
+print "Installation Finished."
+alert

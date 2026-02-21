@@ -1,0 +1,31 @@
+[
+    {
+        "name": "DICT_CREATE",
+        "description": "Create a new dictionary. Example: create dict user",
+        "regex": "create dict (?P<name>\\w+)",
+        "opcode": "01111000",
+        "args": [{"group": "name", "type": "string"}]
+    },
+    {
+        "name": "DICT_SET",
+        "description": "Set Key/Value. Example: set key 'name' in user to 'Alice'",
+        "regex": "set key [\"'](?P<key>.*?)[\"'] in (?P<dict>\\w+) to [\"'](?P<val>.*?)[\"']",
+        "opcode": "01111001",
+        "args": [
+            {"group": "dict", "type": "string"},
+            {"group": "key", "type": "string"},
+            {"group": "val", "type": "string"}
+        ]
+    },
+    {
+        "name": "DICT_GET",
+        "description": "Get Value. Example: get key 'name' from user into myVar",
+        "regex": "get key [\"'](?P<key>.*?)[\"'] from (?P<dict>\\w+) into (?P<var>\\w+)",
+        "opcode": "01111010",
+        "args": [
+            {"group": "dict", "type": "string"},
+            {"group": "key", "type": "string"},
+            {"group": "var", "type": "string"}
+        ]
+    }
+]

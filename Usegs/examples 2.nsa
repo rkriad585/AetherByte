@@ -1,0 +1,15 @@
+set playerX to 100
+set enemyX to 150
+
+# Calculate raw distance (might be negative)
+set dist to 0
+add 100 to dist
+sub 150 from dist
+# dist is now -50
+
+# Make positive
+abs dist
+
+print "Distance to Enemy:"
+print dist
+# Output: 50

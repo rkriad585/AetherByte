@@ -1,0 +1,21 @@
+print "Creating User Profile..."
+create dict userProfile
+
+# Set Data
+set key "name" in userProfile to "Alice"
+set key "role" in userProfile to "Admin"
+set key "status" in userProfile to "Active"
+
+# Retrieve Data
+get key "name" from userProfile into userName
+get key "role" from userProfile into userRole
+
+print "User Details:"
+print userName
+print userRole
+
+# Check Admin status
+if userRole is "Admin"
+# (Requires string comparison update or assume logic works)
+then do lines 1
+print "ACCESS GRANTED: Root Privileges"

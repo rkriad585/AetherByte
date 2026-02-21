@@ -1,0 +1,17 @@
+print "Initializing Database..."
+create list userIDs
+
+# Add Data
+push 101 to list userIDs
+push 202 to list userIDs
+push 999 to list userIDs
+
+print "Database Size: 3"
+wait 1 seconds
+
+# Retrieve specific user
+get index 2 from list userIDs to var targetUser
+
+print "Fetching User at Index 2..."
+print targetUser
+# Should print 999

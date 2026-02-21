@@ -1,0 +1,14 @@
+# Define Age
+set age to 18
+
+# Logic Check
+if age is greater than 17
+then do lines 2
+print "Access Granted: Adult"
+alert
+
+# Else block
+if age is less than 18
+then do lines 2
+print "Access Denied: Minor"
+clear

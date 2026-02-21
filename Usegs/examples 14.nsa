@@ -1,0 +1,14 @@
+set logMsg to "System Boot"
+get time into currentTime
+
+# Combine Time and Message
+create list logParts
+push currentTime to list logParts
+push logMsg to list logParts
+
+# Join with separator
+join list logParts by " - " into var finalLog
+
+print "Log Entry:"
+print finalLog
+# Output: 14:30:05 - System Boot

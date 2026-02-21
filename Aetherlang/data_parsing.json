@@ -1,0 +1,35 @@
+[
+    {
+        "name": "STR_SPLIT",
+        "description": "Split text into a list. Example: split myText by ',' into myList",
+        "regex": "split (?P<src_var>\\w+) by [\"'](?P<delim>.*?)[\"'] into list (?P<dest_list>\\w+)",
+        "opcode": "00111100",
+        "args": [
+            {"group": "src_var", "type": "string"},
+            {"group": "delim", "type": "string"},
+            {"group": "dest_list", "type": "string"}
+        ]
+    },
+    {
+        "name": "STR_JOIN",
+        "description": "Join list into text. Example: join myList by '-' into myText",
+        "regex": "join list (?P<src_list>\\w+) by [\"'](?P<delim>.*?)[\"'] into var (?P<dest_var>\\w+)",
+        "opcode": "00111101",
+        "args": [
+            {"group": "src_list", "type": "string"},
+            {"group": "delim", "type": "string"},
+            {"group": "dest_var", "type": "string"}
+        ]
+    },
+    {
+        "name": "STR_REPLACE",
+        "description": "Replace text. Example: replace 'bad' with 'good' in myText",
+        "regex": "replace [\"'](?P<old>.*?)[\"'] with [\"'](?P<new>.*?)[\"'] in (?P<var>\\w+)",
+        "opcode": "00111110",
+        "args": [
+            {"group": "var", "type": "string"},
+            {"group": "old", "type": "string"},
+            {"group": "new", "type": "string"}
+        ]
+    }
+]

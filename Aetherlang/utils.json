@@ -1,0 +1,23 @@
+[
+    {
+        "name": "TYPE_TO_INT",
+        "description": "Convert to Integer. Example: cast myVar to int",
+        "regex": "cast (?P<var>\\w+) to int",
+        "opcode": "10000011",
+        "args": [{"group": "var", "type": "string"}]
+    },
+    {
+        "name": "TYPE_TO_STR",
+        "description": "Convert to String. Example: cast myVar to string",
+        "regex": "cast (?P<var>\\w+) to string",
+        "opcode": "10000100",
+        "args": [{"group": "var", "type": "string"}]
+    },
+    {
+        "name": "SYS_TIME",
+        "description": "Get current timestamp into variable.",
+        "regex": "get time into (?P<var>\\w+)",
+        "opcode": "10000010",
+        "args": [{"group": "var", "type": "string"}]
+    }
+]

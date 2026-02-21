@@ -1,0 +1,11 @@
+set userInput to "I hate bugs"
+
+print "Original:"
+print userInput
+
+# Censor word
+replace "hate" with "love" in userInput
+
+print "Cleaned:"
+print userInput
+# Output: I love bugs

@@ -1,0 +1,13 @@
+set counter to 5
+
+# Loop 5 times
+loop 5
+dec counter
+
+# Print status
+print "Counting down..."
+print counter
+
+if counter equals 0
+then do lines 1
+print "Blast off!"
