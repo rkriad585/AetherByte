@@ -1,0 +1,20 @@
+[
+    {
+        "name": "SYS_WAIT",
+        "description": "Pauses execution. Example: wait 2 seconds",
+        "regex": "(?:wait|sleep) (?P<seconds>\\d+) (?:seconds|sec|s)",
+        "opcode": "10000000",
+        "args": [{"group": "seconds", "type": "int"}]
+    },
+    {
+        "name": "MATH_RANDOM",
+        "description": "Generates random number. Example: random 1 to 100 into myLuck",
+        "regex": "random (?P<min>\\d+) to (?P<max>\\d+) into (?P<var_name>\\w+)",
+        "opcode": "10000001",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "min", "type": "int"},
+            {"group": "max", "type": "int"}
+        ]
+    }
+]

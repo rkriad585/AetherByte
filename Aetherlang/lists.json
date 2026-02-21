@@ -1,0 +1,30 @@
+[
+    {
+        "name": "LIST_CREATE",
+        "description": "Initialize an empty list. Example: create list myData",
+        "regex": "create list (?P<list_name>\\w+)",
+        "opcode": "01110000",
+        "args": [{"group": "list_name", "type": "string"}]
+    },
+    {
+        "name": "LIST_APPEND",
+        "description": "Add number to list. Example: push 50 to list myData",
+        "regex": "push (?P<value>\\d+) to list (?P<list_name>\\w+)",
+        "opcode": "01110001",
+        "args": [
+            {"group": "list_name", "type": "string"},
+            {"group": "value", "type": "int"}
+        ]
+    },
+    {
+        "name": "LIST_GET",
+        "description": "Get item at index. Example: get index 0 from list myData to var x",
+        "regex": "get index (?P<index>\\d+) from list (?P<list_name>\\w+) to var (?P<dest_var>\\w+)",
+        "opcode": "01110010",
+        "args": [
+            {"group": "list_name", "type": "string"},
+            {"group": "dest_var", "type": "string"},
+            {"group": "index", "type": "int"}
+        ]
+    }
+]
