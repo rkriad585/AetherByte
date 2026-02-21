@@ -7,6 +7,16 @@ class BinaryVM:
     Supports Logic, Loops, Advanced Math, and String Manipulation.
     """
     def __init__(self):
+        """
+        Initialize a new BinaryVM instance and reset its runtime state.
+        
+        Creates empty storage for variables and lists, and clears the comparison flag.
+        
+        Attributes:
+            memory (dict): Mapping of variable names to integer or string values.
+            lists (dict): Mapping of list names to Python lists used by list opcodes.
+            flag_cmp (bool): Result of the most recent comparison operation; starts False.
+        """
         self.memory = {}
         # Stores the result of the last comparison (True/False)
         
@@ -15,6 +25,17 @@ class BinaryVM:
         self.flag_cmp = False 
 
     def run(self, binary_data):
+        """
+        Execute an 8-bit instruction stream produced by the compiler and return the VM's textual output.
+        
+        This resets the VM state (memory, lists, and comparison flag) and processes the provided binary instructions line-by-line. Supported behaviors include variable and string storage, list creation/push/get, arithmetic and increment/decrement, comparisons with conditional line-skipping, printing variables or raw text, a CLEAR marker that replaces output with "__CLEAR__", an ALERT system message, a capped WAIT/SLEEP (max 5 seconds), and RANDOM NUMBER assignment to memory. Opcode parsing errors and runtime faults are caught and appended to the output as error lines; list- and index-related errors are also appended.
+        
+        Parameters:
+            binary_data (str): Multiline string where each non-empty line is a space-separated sequence of binary tokens starting with an opcode.
+        
+        Returns:
+            str: The VM output collected during execution, joined with newline characters. Error messages and special markers (e.g., "__CLEAR__") are included in this output.
+        """
         self.memory = {} 
         self.lists = {}     # <--- ADD THIS! (Clears old lists)
         self.flag_cmp = False
