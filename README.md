@@ -1,8 +1,10 @@
 # AetherByte
 
+![logo](static/images/logo.svg)
+
 **Author:** RK Riad Khan
 **Email:** rkriad585@gmail.com
-**GitHub Repository:** [GitHub.com/rkriad585/AetherByte](https://github.com/rkriad585/AetherByte)
+**GitHub Repository:** [AetherByte](https://github.com/rkriad585/AetherByte)
 
 ## Project Overview
 
