@@ -1,0 +1,93 @@
+[
+    {
+        "name": "STORE",
+        "regex": "set (?P<var_name>\\w+) to (?P<value>.+)",
+        "opcode": "00010000",
+        "args": [
+            {"group": "var_name", "type": "string"},
+            {"group": "value", "type": "string"}
+        ]
+    },
+    {
+        "name": "ADD",
+        "regex": "add (?P<value>.+) to (?P<var_name>\\w+)",
+        "opcode": "00010001",
+        "args": [
+            {"group": "value", "type": "string"},
+            {"group": "var_name", "type": "string"}
+        ]
+    },
+    {
+        "name": "SUB",
+        "regex": "sub (?P<value>.+) from (?P<var_name>\\w+)",
+        "opcode": "00010010",
+        "args": [
+            {"group": "value", "type": "string"},
+            {"group": "var_name", "type": "string"}
+        ]
+    },
+    {
+        "name": "MUL",
+        "regex": "mul (?P<value>.+) to (?P<var_name>\\w+)",
+        "opcode": "00010011",
+        "args": [
+            {"group": "value", "type": "string"},
+            {"group": "var_name", "type": "string"}
+        ]
+    },
+    {
+        "name": "DIV",
+        "regex": "div (?P<value>.+) from (?P<var_name>\\w+)",
+        "opcode": "00010100",
+        "args": [
+            {"group": "value", "type": "string"},
+            {"group": "var_name", "type": "string"}
+        ]
+    },
+    {
+        "name": "PRINT_STRING",
+        "regex": "print \"(?P<text>[^\"]+)\"",
+        "opcode": "00110001",
+        "args": [
+            {"group": "text", "type": "string"}
+        ]
+    },
+    {
+        "name": "PRINT_VAR",
+        "regex": "print (?P<var_name>\\w+)",
+        "opcode": "00110010",
+        "args": [
+            {"group": "var_name", "type": "string"}
+        ]
+    },
+    {
+        "name": "LOOP",
+        "regex": "loop (?P<count>\\d+)",
+        "opcode": "01000000",
+        "args": [
+            {"group": "count", "type": "int"}
+        ]
+    },
+    {
+        "name": "COMPARE",
+        "regex": "compare (?P<var1>\\w+) with (?P<var2>\\w+)",
+        "opcode": "00100000",
+        "args": [
+            {"group": "var1", "type": "string"},
+            {"group": "var2", "type": "string"}
+        ]
+    },
+    {
+        "name": "CLEAR_SYSTEM",
+        "regex": "clear system",
+        "opcode": "11110000",
+        "args": []
+    },
+    {
+        "name": "ALERT_SYSTEM",
+        "regex": "alert system",
+        "opcode": "11111111",
+        "args": []
+    }
+]
+written by Neorwc
